@@ -16,13 +16,16 @@ namespace Calculator;
 /// </summary>
 public partial class MainWindow : Window
 {
+
+    private double firstNumber = 0;
+    private string? currentOperator = "";
+    private bool isOperationPerformed = false;
     public MainWindow()
     {
-        InitializeComponent();
+        InitializeComponent(); 
     }
 
-   string currentOperator;
-   string firstNumber;
+
     
 
     private void NumberButton_Click(object sender, RoutedEventArgs e)
@@ -37,7 +40,7 @@ public partial class MainWindow : Window
         if (Display.Text == "0")
         {
             Display.Text = number;
-            firstNumber = number;
+
         }
         else
         {
@@ -51,22 +54,54 @@ public partial class MainWindow : Window
     
     private void OperatorButton_Click(object sender, RoutedEventArgs e)
     {
-        
-
+        var button = (Button)sender;
+        if (button.Content.ToString() != "=" && Display.Text != "0")
+        {
+            firstNumber = Double.Parse(Display.Text);
+            currentOperator = button.Content.ToString();
+            isOperationPerformed = true;
+            Display.Text = "0";
+        }
     }
 
     private void EnterButton_Click(object sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        switch (currentOperator)
+        {
+            case "+":
+                Display.Text = (firstNumber + Double.Parse(Display.Text)).ToString();
+                break;
+            case "-":
+                Display.Text = (firstNumber - Double.Parse(Display.Text)).ToString();
+                break;
+            case "*":
+                Display.Text = (firstNumber * Double.Parse(Display.Text)).ToString();
+                break;
+            case "/":
+                Display.Text = (firstNumber / Double.Parse(Display.Text)).ToString();
+                break;
+        }
+
+        isOperationPerformed = false;
     }
     
     private void ClearButton_Click(object sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        Display.Text = "0";
+        firstNumber = 0;
+        currentOperator = "";
+        isOperationPerformed = false;
     }
 
     private void BackButton_Click(object sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        if (Display.Text.Length > 1)
+        {
+            Display.Text = Display.Text.Substring(0, Display.Text.Length - 1);
+        }
+        else
+        {
+            Display.Text = "0";
+        }
     }
 }
